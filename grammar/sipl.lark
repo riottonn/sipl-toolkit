@@ -1,0 +1,35 @@
+start: block
+
+block: "begin" statement* "end"
+statement: assignment
+           | conditional
+           | while_loop
+           | skip_stmt
+           | block
+
+assignment: CNAME ":=" expr ";"
+conditional: "if" condition "then" statement "else" statement
+while_loop: "while" condition "do" statement
+skip_stmt: "skip" ";"
+
+?expr: term
+     | expr "+" term  -> add
+     | expr "-" term  -> sub
+
+?term: factor
+     | term "*" factor -> mul
+
+?factor: CNAME         -> var
+       | NUMBER        -> num
+       | "(" expr ")"
+
+?condition: comp
+
+comp: expr ">" expr  -> gt
+    | expr "<" expr  -> lt
+    | expr "=" expr  -> eq
+
+%import common.CNAME
+%import common.NUMBER
+%import common.WS
+%ignore WS
